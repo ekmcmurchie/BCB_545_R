@@ -520,8 +520,8 @@ ggsave("zygo_group_plot.png", plot = big_zygo_group_plot, width = 5, height = 5,
 
 geno5 <- read.delim("https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2022/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt", header = TRUE, sep = "\t")
 
-geno5$GC <- apply(geno5, 1, function(x) length(which(x == ("G/C") | x == ("C/G"))))
-geno5$not_GC <- apply(geno5, 1, function(x) length(which(x == ("?/?") | x == ("A/A") | x == ("T/T") | x == ("C/C") | x == ("G/G") | x == ("A/C") | x == ("A/T") | x == ("A/G") | x == ("C/A") | x == ("C/T") | x == ("G/A") | x == ("G/T") | x == ("T/A") | x == ("T/C") | x == ("T/G"))))
+geno5$GC <- apply(geno5, 1, function(x) length(which(x == ("G/C") | x == ("C/G") | x == ("G/G") | x == ("C/C"))))
+geno5$not_GC <- apply(geno5, 1, function(x) length(which(x == ("?/?") | x == ("A/A") | x == ("T/T") | x == ("A/C") | x == ("A/T") | x == ("A/G") | x == ("C/A") | x == ("C/T") | x == ("G/A") | x == ("G/T") | x == ("T/A") | x == ("T/C") | x == ("T/G"))))
 view(geno5)
 
 geno_gc <- geno5 %>%

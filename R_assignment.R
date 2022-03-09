@@ -349,38 +349,215 @@ write.table(chr10_teosinte_dash, file = "chr10_teosinte_dash.txt", sep = "\t", r
 
 sort_maize_bin <- sort_maize %>% 
   filter(Position != "unknown") %>%
-  filter(Position != "multiple") %>%
-  mutate(position_binned = cut(as.numeric(Position), 10)) %>%
-  filter(Chromosome != "multiple") %>%
-  filter(Chromosome != "unknown")
+  filter(Position != "multiple") %>% # keep only chromosomes of known position
+  mutate(position_binned = cut(as.numeric(Position), 10)) %>% # make 10 bins per chromosome
+  filter(Chromosome != "multiple") %>% 
+  filter(Chromosome != "unknown") %>% # keep only SNPs where chromosome is known
+  mutate(Chromosome = fct_relevel(Chromosome, c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")))
+# final step sets levels so graph reads in order of chromosome number
 
-  
 maize <- ggplot(data = sort_maize_bin) + 
-  geom_bar(mapping = aes(x = position_binned, fill = Chromosome)) +
+  geom_bar(mapping = aes(x = position_binned, fill = Chromosome)) + # colored by chromosome
   xlab("Position(basepairs)") +
   ylab("SNP Distribution") +
-  theme(axis.text.x = element_text(angle = 90)) +
-  facet_grid(~as.numeric(Chromosome))
+  theme(axis.text.x = element_text(angle = 90)) + # changes angle so position is readable
+  facet_grid(~as.numeric(Chromosome)) # facet by chromosome
 
 
 sort_teosinte_bin <- sort_teosinte %>% 
   filter(Position != "unknown") %>%
-  filter(Position != "multiple") %>%
-  mutate(position_binned = cut(as.numeric(Position), 10)) %>%
+  filter(Position != "multiple") %>% # keep only chromosomes of known position
+  mutate(position_binned = cut(as.numeric(Position), 10)) %>% # make 10 bins per chromosome
   filter(Chromosome != "multiple") %>%
-  filter(Chromosome != "unknown")
+  filter(Chromosome != "unknown") %>% # keep only SNPs where chromosome is known
+  mutate(Chromosome = fct_relevel(Chromosome, c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")))
+# final step sets levels so graph reads in order of chromosome number
 
 teosinte <- ggplot(data = sort_teosinte_bin) + 
-  geom_bar(mapping = aes(x = position_binned, fill = Chromosome)) +
+  geom_bar(mapping = aes(x = position_binned, fill = Chromosome)) + # colored by chromosome
   xlab("Position(basepairs)") +
   ylab("SNP Distribution") +
-  theme(axis.text.x = element_text(angle = 90)) +
-  facet_grid(~as.numeric(Chromosome))
+  theme(axis.text.x = element_text(angle = 90)) + # changes angle so position is readable
+  facet_grid(~as.numeric(Chromosome)) # facet by chromosome
 
-SNP_figure <- ggarrange(maize, teosinte,
+SNP_figure <- ggarrange(maize, teosinte, # from ggpubr, arranges graphs
                     labels = c("maize", "teosinte"),
-                    ncol = 1, nrow = 2)
+                    ncol = 1, nrow = 2) # graphs areanged with maize on top, teosinte below
 SNP_figure
 
-ggsave("SNP_figure.pdf", plot = SNP_figure, width = 12, height = 15, units = "in", dpi = 300)
+ggsave("SNP_figure.pdf", plot = SNP_figure, width = 12, height = 15, units = "in", dpi = 300) # print to pdf
 
+ggsave("SNP_figure.png", plot = SNP_figure, width = 12, height = 15, units = "in", dpi = 300) # print to png
+
+
+#SECOND SNP graph starts below
+unknown_maize <- sort_maize %>%
+  filter(Chromosome == "unknown")
+view(unknown_maize)
+
+multiple_maize <- sort_maize %>%
+  filter(Chromosome == "multiple")
+view(multiple_maize)
+
+mchr1 <- nrow(chr1_maize)
+mchr2 <- nrow(chr2_maize)
+mchr3 <- nrow(chr3_maize)
+mchr4 <- nrow(chr4_maize)
+mchr5 <- nrow(chr5_maize)
+mchr6 <- nrow(chr6_maize)
+mchr7 <- nrow(chr7_maize)
+mchr8 <- nrow(chr8_maize)
+mchr9 <- nrow(chr9_maize)
+mchr10 <- nrow(chr10_maize)
+mchrmult <- nrow(multiple_maize)
+mchrunkn <- nrow(unknown_maize)
+
+unknown_teosinte <- sort_teosinte %>%
+  filter(Chromosome == "unknown")
+view(unknown_teosinte)
+
+multiple_teosinte <- sort_teosinte %>%
+  filter(Chromosome == "multiple")
+view(multiple_teosinte)
+
+tchr1 <- nrow(chr1_teosinte)
+tchr2 <- nrow(chr2_teosinte)
+tchr3 <- nrow(chr3_teosinte)
+tchr4 <- nrow(chr4_teosinte)
+tchr5 <- nrow(chr5_teosinte)
+tchr6 <- nrow(chr6_teosinte)
+tchr7 <- nrow(chr7_teosinte)
+tchr8 <- nrow(chr8_teosinte)
+tchr9 <- nrow(chr9_teosinte)
+tchr10 <- nrow(chr10_teosinte)
+tchrmult <- nrow(multiple_teosinte)
+tchrunkn <- nrow(unknown_teosinte)
+
+SNP_pos_df <- data.frame(chromosome = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "multiple", "unknown", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "multiple", "unknown"),
+                    species = c("maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte"),
+                    SNP_positions = c(mchr1, mchr2, mchr3, mchr4, mchr5, mchr6, mchr7, mchr8, mchr9, mchr10, mchrmult, mchrunkn, tchr1, tchr2, tchr3, tchr4, tchr5, tchr6, tchr7, tchr8, tchr9, tchr10, tchrmult, tchrunkn))
+
+view(SNP_pos_df)
+
+SNP_pos_df <- SNP_pos_df %>%
+  mutate(chromosome = fct_relevel(chromosome, c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "multiple", "unknown")))
+
+SNP_pos_bar <- ggplot(data = SNP_pos_df, aes(x = species, y = SNP_positions, fill = species)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  theme(axis.text.x = element_text(angle = 90)) +
+  xlab("Species") +
+  ylab("Number of SNP positions") +
+  facet_grid(~chromosome)
+SNP_pos_bar
+
+ggsave("SNP_pos_bar.pdf", plot = SNP_pos_bar, width = 10, height = 5, units = "in", dpi = 300) # print to pdf
+
+ggsave("SNP_pos_bar.png", plot = SNP_pos_bar, width = 10, height = 5, units = "in", dpi = 300) # print to png
+
+
+## NEXT graph
+
+
+geno4 <- read.delim("https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2022/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt", header = TRUE, sep = "\t")
+
+geno4$homozygous <- apply(geno4, 1, function(x) length(which(x == ("A/A") | x == ("T/T") | x == ("C/C") | x == ("G/G"))))
+geno4$heterozygous <- apply(geno4, 1, function(x) length(which(x == ("A/C") | x == ("A/T") | x == ("A/G") | x == ("C/A") | x == ("C/T") | x == ("C/G") | x == ("G/A") | x == ("G/C") | x == ("G/T") | x == ("T/A") | x == ("T/C") | x == ("T/G"))))
+geno4$missing <- apply(geno4, 1, function(x) length(which(x == ("?/?"))))
+geno4$total <- apply(geno4, 1, function(x) length(which(x == ("?/?") | x == ("A/A") | x == ("T/T") | x == ("C/C") | x == ("G/G") | x == ("A/C") | x == ("A/T") | x == ("A/G") | x == ("C/A") | x == ("C/T") | x == ("C/G") | x == ("G/A") | x == ("G/C") | x == ("G/T") | x == ("T/A") | x == ("T/C") | x == ("T/G"))))
+
+view(geno4)
+
+geno_totals <- geno4 %>%
+  filter(Group %in% c("ZMMIL", "ZMMLR", "ZMMMR", "ZMPBA", "ZMPIL", "ZMPJA")) %>%
+  mutate(species = fct_recode(Group, 
+                             "maize" = "ZMMIL", 
+                             "maize" = "ZMMLR",
+                             "maize" = "ZMMMR",
+                             "teosinte" = "ZMPBA",
+                             "teosinte" = "ZMPIL",
+                             "teosinte" = "ZMPJA"))
+  view(geno_totals)
+
+big_zygo <- geno_totals %>%
+  select(Group, homozygous, heterozygous, missing) %>%
+  mutate(species = fct_recode(Group, 
+                              "maize" = "ZMMIL", 
+                              "maize" = "ZMMLR",
+                              "maize" = "ZMMMR",
+                              "teosinte" = "ZMPBA",
+                              "teosinte" = "ZMPIL",
+                              "teosinte" = "ZMPJA"))
+
+
+big_zygo_pivot <- big_zygo %>% 
+  select(Group, species, homozygous, heterozygous, missing) %>%
+  pivot_longer(., cols = c(homozygous, heterozygous, missing), names_to = "zygosity", values_to = "count")
+view(big_zygo_pivot)
+
+big_zygo_species_plot <- ggplot(big_zygo_pivot, aes(fill = zygosity, y = count, x = species)) + 
+  xlab("Species") +
+  ylab("Proportion") +
+  geom_bar(position = "fill", stat = "identity")
+big_zygo_species_plot
+
+
+ggsave("zygo_species_plot.pdf", plot = big_zygo_species_plot, width = 5, height = 5, units = "in", dpi = 300) # print to pdf
+
+ggsave("zygo_species_plot.png", plot = big_zygo_species_plot, width = 5, height = 5, units = "in", dpi = 300) # print to png
+
+
+big_zygo_group_plot <- ggplot(big_zygo_pivot, aes(fill = zygosity, y = count, x = Group)) + 
+  xlab("Group") +
+  ylab("Proportion") +
+  geom_bar(position = "fill", stat = "identity")
+big_zygo_group_plot
+
+ggsave("zygo_group_plot.pdf", plot = big_zygo_group_plot, width = 5, height = 5, units = "in", dpi = 300) # print to pdf
+
+ggsave("zygo_group_plot.png", plot = big_zygo_group_plot, width = 5, height = 5, units = "in", dpi = 300) # print to png
+
+## FUN graph
+
+geno5 <- read.delim("https://raw.githubusercontent.com/EEOB-BioData/BCB546-Spring2022/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt", header = TRUE, sep = "\t")
+
+geno5$GC <- apply(geno5, 1, function(x) length(which(x == ("G/C") | x == ("C/G"))))
+geno5$not_GC <- apply(geno5, 1, function(x) length(which(x == ("?/?") | x == ("A/A") | x == ("T/T") | x == ("C/C") | x == ("G/G") | x == ("A/C") | x == ("A/T") | x == ("A/G") | x == ("C/A") | x == ("C/T") | x == ("G/A") | x == ("G/T") | x == ("T/A") | x == ("T/C") | x == ("T/G"))))
+view(geno5)
+
+geno_gc <- geno5 %>%
+  filter(Group %in% c("ZMMIL", "ZMMLR", "ZMMMR", "ZMPBA", "ZMPIL", "ZMPJA")) %>%
+  mutate(species = fct_recode(Group, 
+                              "maize" = "ZMMIL", 
+                              "maize" = "ZMMLR",
+                              "maize" = "ZMMMR",
+                              "teosinte" = "ZMPBA",
+                              "teosinte" = "ZMPIL",
+                              "teosinte" = "ZMPJA"))
+
+gc_pivot <- geno_gc %>% 
+  select(Group, species, GC, not_GC) %>%
+  pivot_longer(., cols = c(GC, not_GC), names_to = "GC_content", values_to = "count")
+
+
+view(gc_pivot)
+
+gc_group_plot <- ggplot(gc_pivot, aes(fill = GC_content, y = count, x = Group)) + 
+  xlab("Group") +
+  ylab("Proportion") +
+  geom_bar(position = "fill", stat = "identity")
+gc_group_plot
+
+ggsave("gc_group_plot.pdf", plot = gc_group_plot, width = 5, height = 5, units = "in", dpi = 300) # print to pdf
+
+ggsave("gc_group_plot.png", plot = gc_group_plot, width = 5, height = 5, units = "in", dpi = 300) # print to png
+
+
+gc_species_plot <- ggplot(gc_pivot, aes(fill = GC_content, y = count, x = species)) + 
+  xlab("Species") +
+  ylab("Proportion") +
+  geom_bar(position = "fill", stat = "identity")
+gc_species_plot
+
+ggsave("gc_species_plot.pdf", plot = gc_species_plot, width = 5, height = 5, units = "in", dpi = 300) # print to pdf
+
+ggsave("gc_species_plot.png", plot = gc_species_plot, width = 5, height = 5, units = "in", dpi = 300) # print to png

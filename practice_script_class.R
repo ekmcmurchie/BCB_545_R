@@ -128,3 +128,29 @@ rpts2 <- rpts %>%
 #unite unites two columns in one dataset
 #pos is a new column combining chromosome and motif_start, separated by a dash
 #join joins two datasets based on a column
+
+p <- ggplot(data = rpts2, mapping = aes(x = dist, y = recom)) + geom_point(size = 1)
+p <- p + geom_smooth(method = "loess", se = FALSE, span = 1/10)
+print(p)
+
+distinct(rpts2, motif)
+
+ggplot(data = rpts2, mapping = aes(x = dist, y = recom)) + geom_point(size = 1) + 
+  geom_smooth(aes(color = motif), method = "loess", se = FALSE, span = 1/10)
+# the color = motif part makes each motif a different color
+
+p <- ggplot(data = rpts2, mapping = aes(x = dist, y = recom)) + geom_point(size = 1, color = "grey")
+p <- p + geom_smooth(method = 'loess', se = FALSE, span = 1/10)
+p <- p + facet_wrap(~ motif) #makes two horizontally-arranged panels for motif
+print(p)
+
+p <- ggplot(rpts2, aes(x = dist, y = recom)) + geom_point(size = 1, color = "grey")
+p <- p + geom_smooth(method = 'loess', se = FALSE, span = 1/16)
+p <- p + facet_grid(name ~ motif) # lets you make multiple panels
+# facet_grid makes two dimensional patterns, with name and motif both considered separately
+print(p)
+
+p <- ggplot(rpts2, aes(x = dist, y = recom)) + geom_point(size = 1, color = "grey")
+p <- p + geom_smooth(method = 'loess', se = FALSE, span = 1/10)
+p <- p + facet_wrap( ~chr)
+print(p)

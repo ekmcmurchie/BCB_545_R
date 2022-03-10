@@ -504,7 +504,7 @@ geno5 <- geno %>%
 
 geno_totals <- geno5 %>%
   filter(Group %in% c("ZMMIL", "ZMMLR", "ZMMMR", "ZMPBA", "ZMPIL", "ZMPJA")) %>%
-  select(Group, homozygous, heterozygous, missing) %>%
+  select(Sample_ID, Group, homozygous, heterozygous, missing) %>%
   mutate(species = fct_recode(Group, 
                              "maize" = "ZMMIL", 
                              "maize" = "ZMMLR",
@@ -556,6 +556,23 @@ The above graph shows the proportion of homozygous, heterozygous, and missing SN
 The groups ZMPBA, ZMPIL, and ZMPJA are empty for maize because these were teosinte groups. The groups ZMMIL, ZMMLR, and ZMMMR were empty for teosinte because these were maize groups. 
 
 From this graph, we can see that missing data is slightly higher in the maize groups ZMMIL and ZMMMR than in other groups. Heterzygosity is extremely low in the maize group ZMMIL, and fairly low in maize group ZMMMR and teosinte group ZMPIL compared to in other groups.
+
+```{r}
+big_zygo_sample_plot <- ggplot(big_zygo_pivot, aes(fill = zygosity, y = count, x = Sample_ID)) +
+  xlab("Sample") +
+  ylab("Proportion") +
+  geom_bar(position = "fill", stat = "identity")
+big_zygo_sample_plot
+
+
+ggsave("zygo_sample_plot.pdf", plot = big_zygo_sample_plot, width = 15, height = 5, units = "in", dpi = 300) # print to pdf
+
+ggsave("zygo_sample_plot.png", plot = big_zygo_sample_plot, width = 15, height = 5, units = "in", dpi = 300) # print to png
+```
+
+This shows the proportion of homozygous, heterozygous, and missing SNP positions for each sample, with the graph saved as a pdf and png. Due to the very high number of samples, Sample ID is not legible. 
+
+From this graph, we can see that the proportion of missing data is similar for most samples. Heterozygosity is very high for a few samples (maybe about 1/5 of the samples), but similar in proportion among most other samples.
 
 ### Graph of our choice
 ```{r}

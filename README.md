@@ -11,5 +11,3 @@ This directory contains:
 6. `README.md`, (this file)
 7. `final_files` directory, which contains two subdirectories: `final_maize_files` (containing my 20 files with data for maize chromosomes) and `final_teosinte_files` (contianing my 20 files with data for teosinte chromosomes).
 8. `plots` directory containing the pdf and png versions of my plots (also viewable in lower quality in the HTML)
-
-NOTE: Running the full R markdown file will print copies of images and data files into the main directory (`BCB_545_R`). 

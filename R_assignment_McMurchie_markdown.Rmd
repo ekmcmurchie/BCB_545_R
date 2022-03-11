@@ -13,10 +13,11 @@ Read in necessary libraries first
 ```{r}
 library(tidyverse)
 library(dplyr)
-library(janitor) 
-library(data.table)
+library(janitor) # helps in data cleanup
+library(data.table) # specifically for data table work
 library(stringr)
-library(ggpubr)
+library(ggpubr) # used for gg.arrange function (arranges plots)
+library(RColorBrewer) # for plot colors
 
 ```
 
@@ -140,45 +141,12 @@ sort_maize <- join_maize %>%
   arrange(as.numeric(Chromosome), as.numeric(Position))
 # sorts by chromosome number and position, in ascending order
 
-chr1_maize <- sort_maize %>%
-  filter(Chromosome == 1)
-write.table(chr1_maize, file = "chr1_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr2_maize <- sort_maize %>%
-  filter(Chromosome == 2)
-write.table(chr2_maize, file = "chr2_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr3_maize <- sort_maize %>%
-  filter(Chromosome == 3)
-write.table(chr3_maize, file = "chr3_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr4_maize <- sort_maize %>%
-  filter(Chromosome == 4)
-write.table(chr4_maize, file = "chr4_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr5_maize <- sort_maize %>%
-  filter(Chromosome == 5)
-write.table(chr5_maize, file = "chr5_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr6_maize <- sort_maize %>%
-  filter(Chromosome == 6)
-write.table(chr6_maize, file = "chr6_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr7_maize <- sort_maize %>%
-  filter(Chromosome == 7)
-write.table(chr7_maize, file = "chr7_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr8_maize <- sort_maize %>%
-  filter(Chromosome == 8)
-write.table(chr8_maize, file = "chr8_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr9_maize <- sort_maize %>%
-  filter(Chromosome == 9)
-write.table(chr9_maize, file = "chr9_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr10_maize <- sort_maize %>%
-  filter(Chromosome == 10)
-write.table(chr10_maize, file = "chr10_maize.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
+for (i in 1:10) {
+  temp_df <- sort_maize %>%
+    filter(Chromosome == i) 
+write.table(temp_df, file = paste("maize_chr",i,".tsv", sep = ""), row.names = FALSE, col.names = TRUE)
+}
+# this step splits sort_maize into ten files (based on a temporary dataframe) one for each chromosome number
 
 ## Below, steps for making files with descending position and dash
 
@@ -189,45 +157,12 @@ sort_desc_maize <- join_maize %>%
 maize_dash <- data.frame(lapply(sort_desc_maize, gsub, pattern = "[?]", replacement = "-"))
 # replaces ? with -
 
-chr1_maize_dash <- maize_dash %>%
-  filter(Chromosome == 1)
-write.table(chr1_maize_dash, file = "chr1_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr2_maize_dash <- maize_dash %>%
-  filter(Chromosome == 2)
-write.table(chr2_maize_dash, file = "chr2_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr3_maize_dash <- maize_dash %>%
-  filter(Chromosome == 3)
-write.table(chr3_maize_dash, file = "chr3_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr4_maize_dash <- maize_dash %>%
-  filter(Chromosome == 4)
-write.table(chr4_maize_dash, file = "chr4_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr5_maize_dash <- maize_dash %>%
-  filter(Chromosome == 5)
-write.table(chr5_maize_dash, file = "chr5_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr6_maize_dash <- maize_dash %>%
-  filter(Chromosome == 6)
-write.table(chr6_maize_dash, file = "chr6_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr7_maize_dash <- maize_dash %>%
-  filter(Chromosome == 7)
-write.table(chr7_maize_dash, file = "chr7_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr8_maize_dash <- maize_dash %>%
-  filter(Chromosome == 8)
-write.table(chr8_maize_dash, file = "chr8_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr9_maize_dash <- maize_dash %>%
-  filter(Chromosome == 9)
-write.table(chr9_maize_dash, file = "chr9_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr10_maize_dash <- maize_dash %>%
-  filter(Chromosome == 10)
-write.table(chr10_maize_dash, file = "chr10_maize_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
+for (i in 1:10) {
+  temp_df <- maize_dash %>%
+    filter(Chromosome == i) 
+write.table(temp_df, file = paste("maize_dash_chr",i,".tsv", sep = ""), row.names = FALSE, col.names = TRUE)
+}
+# this step splits maize_dash into ten files (based on a temporary dataframe) one for each chromosome number
 
 ```
 
@@ -267,45 +202,12 @@ sort_teosinte <- join_teosinte %>%
   arrange(as.numeric(Chromosome), as.numeric(Position))
 # sorts by chromosome number and position, in ascending order
 
-chr1_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 1)
-write.table(chr1_teosinte, file = "chr1_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr2_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 2)
-write.table(chr2_teosinte, file = "chr2_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr3_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 3)
-write.table(chr3_teosinte, file = "chr3_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr4_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 4)
-write.table(chr4_teosinte, file = "chr4_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr5_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 5)
-write.table(chr5_teosinte, file = "chr5_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr6_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 6)
-write.table(chr6_teosinte, file = "chr6_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr7_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 7)
-write.table(chr7_teosinte, file = "chr7_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr8_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 8)
-write.table(chr8_teosinte, file = "chr8_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr9_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 9)
-write.table(chr9_teosinte, file = "chr9_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr10_teosinte <- sort_teosinte %>%
-  filter(Chromosome == 10)
-write.table(chr10_teosinte, file = "chr10_teosinte.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
+for (i in 1:10) {
+  temp_df <- sort_teosinte %>%
+    filter(Chromosome == i) 
+write.table(temp_df, file = paste("teosinte_chr",i,".tsv", sep = ""), row.names = FALSE, col.names = TRUE)
+}
+# this step splits sort_teosinte into ten files (based on a temporary dataframe) one for each chromosome number
 
 sort_desc_teosinte <- join_teosinte %>%
   arrange(as.numeric(Chromosome), desc(as.numeric(Position))) 
@@ -314,45 +216,12 @@ sort_desc_teosinte <- join_teosinte %>%
 teosinte_dash <- data.frame(lapply(sort_desc_teosinte, gsub, pattern = "[?]", replacement = "-"))
 # replaces ? with -
 
-chr1_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 1)
-write.table(chr1_teosinte_dash, file = "chr1_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr2_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 2)
-write.table(chr2_teosinte_dash, file = "chr2_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr3_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 3)
-write.table(chr3_teosinte_dash, file = "chr3_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr4_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 4)
-write.table(chr4_teosinte_dash, file = "chr4_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr5_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 5)
-write.table(chr5_teosinte_dash, file = "chr5_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr6_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 6)
-write.table(chr6_teosinte_dash, file = "chr6_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr7_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 7)
-write.table(chr7_teosinte_dash, file = "chr7_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr8_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 8)
-write.table(chr8_teosinte_dash, file = "chr8_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr9_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 9)
-write.table(chr9_teosinte_dash, file = "chr9_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
-
-chr10_teosinte_dash <- teosinte_dash %>%
-  filter(Chromosome == 10)
-write.table(chr10_teosinte_dash, file = "chr10_teosinte_dash.txt", sep = "\t", row.names = FALSE, col.names = TRUE)
+for (i in 1:10) {
+  temp_df <- teosinte_dash %>%
+    filter(Chromosome == i) 
+write.table(temp_df, file = paste("teosinte_dash_chr",i,".tsv", sep = ""), row.names = FALSE, col.names = TRUE)
+}
+# this step splits teosinte_dash into ten files (based on a temporary dataframe) one for each chromosome number
 
 ```
 
@@ -381,10 +250,11 @@ sort_maize_bin <- sort_maize %>%
 # final step sets levels so graph reads in order of chromosome number
 
 maize <- ggplot(data = sort_maize_bin) + 
-  geom_bar(mapping = aes(x = position_binned, fill = Chromosome)) + # colored by chromosome
+  geom_bar(mapping = aes(x = position_binned, fill = Chromosome), color = "black") + # colored by chromosome, with black outline
   xlab("Position(basepairs)") +
   ylab("SNP Distribution") +
   theme(axis.text.x = element_text(angle = 90)) + # changes angle so position is readable
+  scale_fill_brewer(palette = "Spectral") +
   facet_grid(~as.numeric(Chromosome)) # facet by chromosome
 
 
@@ -398,10 +268,11 @@ sort_teosinte_bin <- sort_teosinte %>%
 # final step sets levels so graph reads in order of chromosome number
 
 teosinte <- ggplot(data = sort_teosinte_bin) + 
-  geom_bar(mapping = aes(x = position_binned, fill = Chromosome)) + # colored by chromosome
+  geom_bar(mapping = aes(x = position_binned, fill = Chromosome), color = "black") + # colored by chromosome, with black outline
   xlab("Position(basepairs)") +
   ylab("SNP Distribution") +
   theme(axis.text.x = element_text(angle = 90)) + # changes angle so position is readable
+  scale_fill_brewer(palette = "Spectral") +
   facet_grid(~as.numeric(Chromosome)) # facet by chromosome
 
 SNP_figure <- ggarrange(maize, teosinte, # from ggpubr, arranges graphs
@@ -422,60 +293,83 @@ To do this, I first filtered out the SNPs that were in unknown and multiple posi
 
 Then, for both maize and teosinte, I made a plot of position binned, with position colored and faceted by chromosome. 
 
-I arranged these two plots into a single figure, `SNP_figure`, using `ggarrange` from the ggpubr package, and saved them as a pdf and png. 
+I arranged these two plots into a single figure, `SNP_figure`, using `ggarrange` from the ggpubr package, and saved them as a pdf and png. Note: the pdf and png versions of this figure are easier to read than the version in the html due to increased horizontal dimensions.
 
 From this figure, we can see that there are similar numbers of SNP positions on each chromosome for maize and teosinte, but that on each chromosome, there are fewer SNP positions in the middle (the centromere). Some chromosomes have more SNP positions than others. For example, chromosome 1 has many more SNP positions than Chromosome 10. 
 
 ```{r}
-unknown_maize <- sort_maize %>%
+maize_unknown <- sort_maize %>%
+  filter(Chromosome == "unknown")
+# makes datafame for maize SNPs on unknown chromosome
+
+maize_multiple <- sort_maize %>%
+  filter(Chromosome == "multiple")
+# makes datafame for maize SNPs on unknown chromosome
+
+Chromosome_split_maize <- split(sort_maize, sort_maize$Chromosome)
+# splits sort_maize by chromosome number
+
+maize_chr_data <- c("maize_chr1", "maize_chr10", "maize_chr2", "maize_chr3", "maize_chr4", "maize_chr5", "maize_chr6", "maize_chr7", "maize_chr8", "maize_chr9")
+# makes a list of names for dataframes for each chromosome of maize
+
+for (i in 1:length(Chromosome_split_maize)) {assign(maize_chr_data[i], Chromosome_split_maize[[i]])}
+# a loop to split the data based upon the created group of lists (Chromosome_split_maize) and assigning the corresponding name as the object.
+
+mchr1 <- nrow(maize_chr1)
+mchr2 <- nrow(maize_chr2)
+mchr3 <- nrow(maize_chr3)
+mchr4 <- nrow(maize_chr4)
+mchr5 <- nrow(maize_chr5)
+mchr6 <- nrow(maize_chr6)
+mchr7 <- nrow(maize_chr7)
+mchr8 <- nrow(maize_chr8)
+mchr9 <- nrow(maize_chr9)
+mchr10 <- nrow(maize_chr10)
+mchrmult <- nrow(maize_multiple)
+mchrunkn <- nrow(maize_unknown)
+
+teosinte_unknown <- sort_teosinte %>%
   filter(Chromosome == "unknown")
 
-multiple_maize <- sort_maize %>%
+teosinte_multiple <- sort_teosinte %>%
   filter(Chromosome == "multiple")
 
-mchr1 <- nrow(chr1_maize)
-mchr2 <- nrow(chr2_maize)
-mchr3 <- nrow(chr3_maize)
-mchr4 <- nrow(chr4_maize)
-mchr5 <- nrow(chr5_maize)
-mchr6 <- nrow(chr6_maize)
-mchr7 <- nrow(chr7_maize)
-mchr8 <- nrow(chr8_maize)
-mchr9 <- nrow(chr9_maize)
-mchr10 <- nrow(chr10_maize)
-mchrmult <- nrow(multiple_maize)
-mchrunkn <- nrow(unknown_maize)
+Chromosome_split_teosinte <- split(sort_teosinte, sort_teosinte$Chromosome)
+# splits sort_teosinte by chromosome number
 
-unknown_teosinte <- sort_teosinte %>%
-  filter(Chromosome == "unknown")
+teosinte_chr_data <- c("teosinte_chr1", "teosinte_chr10", "teosinte_chr2", "teosinte_chr3", "teosinte_chr4", "teosinte_chr5", "teosinte_chr6", "teosinte_chr7", "teosinte_chr8", "teosinte_chr9")
+# makes a list of names for dataframes for each chromosome of teosinte
 
-multiple_teosinte <- sort_teosinte %>%
-  filter(Chromosome == "multiple")
+for (i in 1:length(Chromosome_split_teosinte)) {assign(teosinte_chr_data[i], Chromosome_split_teosinte[[i]])}
+# a loop to split the data based upon the created group of lists (Chromosome_split_teosinte) and assigning the corresponding name as the object.
 
-tchr1 <- nrow(chr1_teosinte)
-tchr2 <- nrow(chr2_teosinte)
-tchr3 <- nrow(chr3_teosinte)
-tchr4 <- nrow(chr4_teosinte)
-tchr5 <- nrow(chr5_teosinte)
-tchr6 <- nrow(chr6_teosinte)
-tchr7 <- nrow(chr7_teosinte)
-tchr8 <- nrow(chr8_teosinte)
-tchr9 <- nrow(chr9_teosinte)
-tchr10 <- nrow(chr10_teosinte)
-tchrmult <- nrow(multiple_teosinte)
-tchrunkn <- nrow(unknown_teosinte)
+tchr1 <- nrow(teosinte_chr1)
+tchr2 <- nrow(teosinte_chr2)
+tchr3 <- nrow(teosinte_chr3)
+tchr4 <- nrow(teosinte_chr4)
+tchr5 <- nrow(teosinte_chr5)
+tchr6 <- nrow(teosinte_chr6)
+tchr7 <- nrow(teosinte_chr7)
+tchr8 <- nrow(teosinte_chr8)
+tchr9 <- nrow(teosinte_chr9)
+tchr10 <- nrow(teosinte_chr10)
+tchrmult <- nrow(teosinte_multiple)
+tchrunkn <- nrow(teosinte_unknown)
 
-SNP_pos_df <- data.frame(chromosome = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "multiple", "unknown", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "multiple", "unknown"),
+SNP_pos_df <- data.frame(chromosome = c("chr 1", "chr 2", "chr 3", "chr 4", "chr 5", "chr 6", "chr 7", "chr 8", "chr 9", "chr 10", "multiple", "unknown", "chr 1", "chr 2", "chr 3", "chr 4", "chr 5", "chr 6", "chr 7", "chr 8", "chr 9", "chr 10", "multiple", "unknown"),
                     species = c("maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte"),
                     SNP_positions = c(mchr1, mchr2, mchr3, mchr4, mchr5, mchr6, mchr7, mchr8, mchr9, mchr10, mchrmult, mchrunkn, tchr1, tchr2, tchr3, tchr4, tchr5, tchr6, tchr7, tchr8, tchr9, tchr10, tchrmult, tchrunkn)) %>%
-  mutate(chromosome = fct_relevel(chromosome, c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "multiple", "unknown")))
+  mutate(chromosome = fct_relevel(chromosome, c("chr 1", "chr 2", "chr 3", "chr 4", "chr 5", "chr 6", "chr 7", "chr 8", "chr 9", "chr 10", "multiple", "unknown")))
 
 
 SNP_pos_bar <- ggplot(data = SNP_pos_df, aes(x = species, y = SNP_positions, fill = species)) +
   geom_bar(stat = "identity", position = position_dodge()) +
-  theme(axis.text.x = element_text(angle = 90)) +
+  theme(axis.text.x = element_text(angle = -90)) + # makes species labels vertical so they're legible 
+  ylim(0,170) + # increases y-axis limit so text labels are visible
+   geom_text(aes(label = SNP_positions), angle = -90, hjust = 1.2) + # adds numeric text labels above bars
   xlab("Species") +
   ylab("Number of SNP positions") +
+  scale_fill_brewer(palette = "Set1") +
   facet_grid(~chromosome)
 SNP_pos_bar
 
@@ -487,7 +381,9 @@ ggsave("SNP_pos_bar.png", plot = SNP_pos_bar, width = 10, height = 5, units = "i
 
 Using these steps, I made a graph showing the total number of SNP positions for both teosinte and maize on each chromosome and on unknown or multiple chromosomes.
 
-To do this, I first made objects containing the SNP positions on unknown and multiple chromosomes for both teosinte and maize. I then counted the number of rows (corresponding to number of SNP positions) for chromosome (and unknown and multiple chromosomes) for each species and put this number into an object. I combined these objects, along with the species names and chromosome numbers, to make a new dataframe `SNP_pos_df`, also making the chromosome numbers factors and changing their order so that it would display as 1, 2, 3, etc. rather than 1, 10, 2. 
+To do this, I first made objects containing the SNP positions on unknown and multiple chromosomes for both teosinte and maize. Next, I split the sorted maize and teosinte dataframes based on chromosome number, made a list containing names for each chromosome for each species, to use with the dataframe I'd made previously. To combine these, I ran a loop that assigned the data for each chromosome from each species to the corresponding name from the list.
+
+I then counted the number of rows (corresponding to number of SNP positions) for chromosome (and unknown and multiple chromosomes) for each species and put this number into an object. I combined these objects, along with the species names and chromosome numbers, to make a new dataframe `SNP_pos_df`, also making the chromosome numbers factors and changing their order so that it would display as 1, 2, 3, etc. rather than 1, 10, 2. 
 
 I then made my plot, setting x to species and y to the number of SNP positions, saving the graph as both a png and pdf. 
 
@@ -520,7 +416,8 @@ big_zygo_pivot <- geno_totals %>%
 big_zygo_species_plot <- ggplot(big_zygo_pivot, aes(fill = zygosity, y = count, x = species)) + 
   xlab("Species") +
   ylab("Proportion") +
-  geom_bar(position = "fill", stat = "identity")
+  geom_bar(position = "fill", stat = "identity") +
+  scale_fill_brewer(palette = "Set1")
 big_zygo_species_plot
 
 
@@ -542,6 +439,7 @@ big_zygo_group_plot <- ggplot(big_zygo_pivot, aes(fill = zygosity, y = count, x 
   ylab("Proportion") +
   geom_bar(position = "fill", stat = "identity") +
   theme(axis.text.x = element_text(angle = 90)) +
+  scale_fill_brewer(palette = "Set1") +
   facet_grid(~species)
 big_zygo_group_plot
 
@@ -561,9 +459,9 @@ From this graph, we can see that missing data is slightly higher in the maize gr
 big_zygo_sample_plot <- ggplot(big_zygo_pivot, aes(fill = zygosity, y = count, x = Sample_ID)) +
   xlab("Sample") +
   ylab("Proportion") +
-  geom_bar(position = "fill", stat = "identity")
-big_zygo_sample_plot
-
+  geom_bar(position = "fill", stat = "identity") +
+  scale_fill_brewer(palette = "Set1")
+big_zygo_sample_plot 
 
 ggsave("zygo_sample_plot.pdf", plot = big_zygo_sample_plot, width = 15, height = 5, units = "in", dpi = 300) # print to pdf
 
@@ -599,6 +497,7 @@ gc_group_plot <- ggplot(gc_pivot, aes(fill = GC_content, y = count, x = Group)) 
   ylab("Proportion") +
   geom_bar(position = "fill", stat = "identity") +
   theme(axis.text.x = element_text(angle = 90)) +
+  scale_fill_brewer(palette = "Dark2") +
   facet_grid(~species)
 gc_group_plot
 
@@ -620,7 +519,8 @@ We can see that the proportion of positions where we know that there's a G or C 
 gc_species_plot <- ggplot(gc_pivot, aes(fill = GC_content, y = count, x = species)) + 
   xlab("Species") +
   ylab("Proportion") +
-  geom_bar(position = "fill", stat = "identity")
+  geom_bar(position = "fill", stat = "identity") +
+  scale_fill_brewer(palette = "Dark2")
 gc_species_plot
 
 ggsave("gc_species_plot.pdf", plot = gc_species_plot, width = 5, height = 5, units = "in", dpi = 300) # print to pdf

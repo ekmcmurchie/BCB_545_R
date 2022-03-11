@@ -272,7 +272,7 @@ teosinte <- ggplot(data = sort_teosinte_bin) +
   xlab("Position(basepairs)") +
   ylab("SNP Distribution") +
   theme(axis.text.x = element_text(angle = 90)) + # changes angle so position is readable
-  scale_fill_brewer(palette = "Spectral") +
+  scale_fill_brewer(palette = "Spectral") + # change plot colors (from RColorBrewer)
   facet_grid(~as.numeric(Chromosome)) # facet by chromosome
 
 SNP_figure <- ggarrange(maize, teosinte, # from ggpubr, arranges graphs
@@ -327,6 +327,7 @@ mchr9 <- nrow(maize_chr9)
 mchr10 <- nrow(maize_chr10)
 mchrmult <- nrow(maize_multiple)
 mchrunkn <- nrow(maize_unknown)
+# counts number of SNP positions on each chromosome and on multiple and unknown chromosomes
 
 teosinte_unknown <- sort_teosinte %>%
   filter(Chromosome == "unknown")
@@ -355,12 +356,13 @@ tchr9 <- nrow(teosinte_chr9)
 tchr10 <- nrow(teosinte_chr10)
 tchrmult <- nrow(teosinte_multiple)
 tchrunkn <- nrow(teosinte_unknown)
+# counts number of SNP positions on each chromosome and on multiple and unknown chromosomes
 
 SNP_pos_df <- data.frame(chromosome = c("chr 1", "chr 2", "chr 3", "chr 4", "chr 5", "chr 6", "chr 7", "chr 8", "chr 9", "chr 10", "multiple", "unknown", "chr 1", "chr 2", "chr 3", "chr 4", "chr 5", "chr 6", "chr 7", "chr 8", "chr 9", "chr 10", "multiple", "unknown"),
                     species = c("maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "maize", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte", "teosinte"),
                     SNP_positions = c(mchr1, mchr2, mchr3, mchr4, mchr5, mchr6, mchr7, mchr8, mchr9, mchr10, mchrmult, mchrunkn, tchr1, tchr2, tchr3, tchr4, tchr5, tchr6, tchr7, tchr8, tchr9, tchr10, tchrmult, tchrunkn)) %>%
   mutate(chromosome = fct_relevel(chromosome, c("chr 1", "chr 2", "chr 3", "chr 4", "chr 5", "chr 6", "chr 7", "chr 8", "chr 9", "chr 10", "multiple", "unknown")))
-
+# making dataframe with each chromosome, speices, and number of SNP positions. Final step (with factor relevel) sets chromosome as factor and changes order so that they read 1, 2, 3, etc. rather than 1, 10, 2, etc. 
 
 SNP_pos_bar <- ggplot(data = SNP_pos_df, aes(x = species, y = SNP_positions, fill = species)) +
   geom_bar(stat = "identity", position = position_dodge()) +
@@ -369,8 +371,8 @@ SNP_pos_bar <- ggplot(data = SNP_pos_df, aes(x = species, y = SNP_positions, fil
    geom_text(aes(label = SNP_positions), angle = -90, hjust = 1.2) + # adds numeric text labels above bars
   xlab("Species") +
   ylab("Number of SNP positions") +
-  scale_fill_brewer(palette = "Set1") +
-  facet_grid(~chromosome)
+  scale_fill_brewer(palette = "Set1") + # Colors from RColorBrewer
+  facet_grid(~chromosome) # facet by chromosome
 SNP_pos_bar
 
 ggsave("SNP_pos_bar.pdf", plot = SNP_pos_bar, width = 10, height = 5, units = "in", dpi = 300) # print to pdf
@@ -397,6 +399,7 @@ geno5 <- geno %>%
   mutate(heterozygous = apply(geno, 1, function(x) length(which(x == ("A/C") | x == ("A/T") | x == ("A/G") | x == ("C/A") | x == ("C/T") | x == ("C/G") | x == ("G/A") | x == ("G/C") | x == ("G/T") | x == ("T/A") | x == ("T/C") | x == ("T/G"))))) %>%
   mutate(missing = apply(geno, 1, function(x) length(which(x == ("?/?"))))) %>%
   mutate(total =  apply(geno, 1, function(x) length(which(x == ("?/?") | x == ("A/A") | x == ("T/T") | x == ("C/C") | x == ("G/G") | x == ("A/C") | x == ("A/T") | x == ("A/G") | x == ("C/A") | x == ("C/T") | x == ("C/G") | x == ("G/A") | x == ("G/C") | x == ("G/T") | x == ("T/A") | x == ("T/C") | x == ("T/G")))))
+# makes dataframe with new columns for homozygous SNP positions, heterozygous SNP positions, missing data, and total
 
 geno_totals <- geno5 %>%
   filter(Group %in% c("ZMMIL", "ZMMLR", "ZMMMR", "ZMPBA", "ZMPIL", "ZMPJA")) %>%
@@ -408,16 +411,17 @@ geno_totals <- geno5 %>%
                              "teosinte" = "ZMPBA",
                              "teosinte" = "ZMPIL",
                              "teosinte" = "ZMPJA")) 
-
+# filters geno5 so that only maize and teosinte groups are selected, as well as only the Sample_ID, Group, and zygosity and missing columns. Also adds a species column.
 
 big_zygo_pivot <- geno_totals %>% 
   pivot_longer(., cols = c(homozygous, heterozygous, missing), names_to = "zygosity", values_to = "count")
+# pivots the zygosity and missing data columns into two columns: zygosity and count
 
 big_zygo_species_plot <- ggplot(big_zygo_pivot, aes(fill = zygosity, y = count, x = species)) + 
   xlab("Species") +
   ylab("Proportion") +
   geom_bar(position = "fill", stat = "identity") +
-  scale_fill_brewer(palette = "Set1")
+  scale_fill_brewer(palette = "Set1") # colors from RColorBrewer
 big_zygo_species_plot
 
 
@@ -438,9 +442,9 @@ big_zygo_group_plot <- ggplot(big_zygo_pivot, aes(fill = zygosity, y = count, x 
   xlab("Group") +
   ylab("Proportion") +
   geom_bar(position = "fill", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 90)) +
-  scale_fill_brewer(palette = "Set1") +
-  facet_grid(~species)
+  theme(axis.text.x = element_text(angle = 90)) + # add rotated text for group names
+  scale_fill_brewer(palette = "Set1") + # colors from RColorBrewer
+  facet_grid(~species) # facet by species
 big_zygo_group_plot
 
 ggsave("zygo_group_plot.pdf", plot = big_zygo_group_plot, width = 5, height = 5, units = "in", dpi = 300) # print to pdf
@@ -460,7 +464,7 @@ big_zygo_sample_plot <- ggplot(big_zygo_pivot, aes(fill = zygosity, y = count, x
   xlab("Sample") +
   ylab("Proportion") +
   geom_bar(position = "fill", stat = "identity") +
-  scale_fill_brewer(palette = "Set1")
+  scale_fill_brewer(palette = "Set1") # colors from RColorBrewer
 big_zygo_sample_plot 
 
 ggsave("zygo_sample_plot.pdf", plot = big_zygo_sample_plot, width = 15, height = 5, units = "in", dpi = 300) # print to pdf
@@ -477,6 +481,7 @@ From this graph, we can see that the proportion of missing data is similar for m
 geno8 <- geno %>%
   mutate(GC = apply(geno, 1, function(x) length(which(x == ("G/C") | x == ("C/G") | x == ("G/G") | x == ("C/C"))))) %>%
   mutate(not_GC = apply(geno, 1, function(x) length(which(x == ("?/?") | x == ("A/A") | x == ("T/T") | x == ("A/C") | x == ("A/T") | x == ("A/G") | x == ("C/A") | x == ("C/T") | x == ("G/A") | x == ("G/T") | x == ("T/A") | x == ("T/C") | x == ("T/G")))))
+# adds two new columns, one (GC) for when we know there's a G or C present and one (not_GC) for when it's uncertain if there's a GC present
 
 geno_gc <- geno8 %>%
   filter(Group %in% c("ZMMIL", "ZMMLR", "ZMMMR", "ZMPBA", "ZMPIL", "ZMPJA")) %>%
@@ -487,18 +492,20 @@ geno_gc <- geno8 %>%
                               "teosinte" = "ZMPBA",
                               "teosinte" = "ZMPIL",
                               "teosinte" = "ZMPJA"))
+# filters so we take only maize and teosinte groups and adds a species column
 
 gc_pivot <- geno_gc %>% 
   select(Group, species, GC, not_GC) %>%
   pivot_longer(., cols = c(GC, not_GC), names_to = "GC_content", values_to = "count")
+# pivots GC and not_GC columns so we have a GC_content column and a count column only
 
 gc_group_plot <- ggplot(gc_pivot, aes(fill = GC_content, y = count, x = Group)) + 
   xlab("Group") +
   ylab("Proportion") +
   geom_bar(position = "fill", stat = "identity") +
-  theme(axis.text.x = element_text(angle = 90)) +
-  scale_fill_brewer(palette = "Dark2") +
-  facet_grid(~species)
+  theme(axis.text.x = element_text(angle = 90)) + # rotate text labeling groups
+  scale_fill_brewer(palette = "Dark2") + # colors from RColorBrewer
+  facet_grid(~species) # facet by species
 gc_group_plot
 
 ggsave("gc_group_plot.pdf", plot = gc_group_plot, width = 5, height = 5, units = "in", dpi = 300) # print to pdf
@@ -520,7 +527,7 @@ gc_species_plot <- ggplot(gc_pivot, aes(fill = GC_content, y = count, x = specie
   xlab("Species") +
   ylab("Proportion") +
   geom_bar(position = "fill", stat = "identity") +
-  scale_fill_brewer(palette = "Dark2")
+  scale_fill_brewer(palette = "Dark2") # colors from RColorBrewer
 gc_species_plot
 
 ggsave("gc_species_plot.pdf", plot = gc_species_plot, width = 5, height = 5, units = "in", dpi = 300) # print to pdf

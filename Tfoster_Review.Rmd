@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-######################################################################################################################
+####################################################################################################################
 
 Initial feedback:
 There were absolutely no errors when running the code. You did have a message, "NAs introduced by coercion" when using as.numeric. However, that's totally fine as there are missing/multiple values that can't be changed to numeric values. You did a great job analyzing each of the files! I really liked your graph that had a side-by-side comparison of teosinte and maize SNP positions - I definitely need to modify my code to include something similar! Great usage of having R print the files in their own directories! Your "on your own" visualization was so creative!
@@ -20,6 +20,6 @@ Suggestions:
   *As I know from your review of my code, you prefer using the histograms for this visualization. Just know, you cannot see gap regions*
 
 
-Overall, all of your graphs are visually satisfying. I can tell that a lot of time was spent thinking, planning, organizing, and coding your thoughts! Fantastic work!
+Overall, all of your graphs are visually satisfying. I can tell that a lot of time was spent thinking, planning, organizing, and coding your thoughts! Fantastic work!!
 
-######################################################################################################################
+####################################################################################################################

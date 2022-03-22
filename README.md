@@ -11,3 +11,5 @@ This directory contains:
 6. `README.md`, (this file)
 7. `final_files` directory, which contains two subdirectories: `final_maize_files` (containing my 20 files with data for maize chromosomes) and `final_teosinte_files` (contianing my 20 files with data for teosinte chromosomes).
 8. `plots` directory containing the pdf and png versions of my plots (also viewable in lower quality in the HTML)
+9. `bsamuel_review`, Beulah Samuel's review of my work.
+10. `Tfoster_review`, Tyler Foster's review of my work. 

@@ -391,6 +391,52 @@ I then made my plot, setting x to species and y to the number of SNP positions, 
 
 This graph shows that the number of SNP positions is identical for each chromosome (and unknown and multiple chromosomes) for both maize and teosinte.
 
+```{r}
+SNP_pos_total <- ggplot(data = SNP_pos_df, aes(x = species, y = SNP_positions, fill = species)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  theme(axis.text.x = element_text(angle = -90)) + # makes species labels vertical so they're legible 
+  xlab("Species") +
+  ylab("Number of SNP positions") +
+  scale_fill_brewer(palette = "Set1")  # Colors from RColorBrewer
+SNP_pos_total
+
+ggsave("./plots/SNP_pos_total.pdf", plot = SNP_pos_total, width = 5, height = 5, units = "in", dpi = 300) # print to pdf
+
+ggsave("./plots/SNP_pos_total.png", plot = SNP_pos_total, width = 5, height = 5, units = "in", dpi = 300) # print to png
+```
+
+One of our reviewers wished to see a graph comparing the total number of SNP positions for each species. This is shown above, using a graph very similar to the one showing total number of SNP positions for each species on each chromosome, but without the data faceted by chromosome number.
+
+```{r}
+maize_point <- ggplot(data = sort_maize_bin) + 
+  geom_point(mapping = aes(x = position_binned, y = Chromosome), color = "black") + # colored by chromosome, with black outline
+  xlab("Position(basepairs)") +
+  ylab("SNP Distribution") +
+  theme(axis.text.x = element_text(angle = 90)) + # changes angle so position is readable
+  scale_fill_brewer(palette = "Spectral") +
+  facet_grid(~as.numeric(Chromosome)) # facet by chromosome
+
+teosinte_point <- ggplot(data = sort_teosinte_bin) + 
+  geom_point(mapping = aes(x = position_binned, y = Chromosome), color = "black") + # colored by chromosome, with black outline
+  xlab("Position(basepairs)") +
+  ylab("SNP Distribution") +
+  theme(axis.text.x = element_text(angle = 90)) + # changes angle so position is readable
+  scale_fill_brewer(palette = "Spectral") + # change plot colors (from RColorBrewer)
+  facet_grid(~as.numeric(Chromosome)) # facet by chromosome
+
+SNP_figure_point <- ggarrange(maize_point, teosinte_point, # from ggpubr, arranges graphs
+                    labels = c("maize", "teosinte"),
+                    ncol = 1, nrow = 2) # graphs arranged with maize on top, teosinte below
+SNP_figure_point
+
+ggsave("./plots/SNP_figure_point.pdf", plot = SNP_figure_point, width = 12, height = 15, units = "in", dpi = 300) # print to pdf
+
+ggsave("./plots/SNP_figure_point.png", plot = SNP_figure_point, width = 12, height = 15, units = "in", dpi = 300) # print to png
+```
+
+One of our reviewers suggested that we plot the distribution of SNPs on chromosomes for each species using a point graph to display gap regions. Here, even using the binned position data, we see that there is a gap region on chromosome 7 for both species. No other chromosomes display such a gap region. To make this plot, I used a similar procedure as I did to make the historgram displaying SNP position across each chromosome, but instead used `geom_point`, setting x equal to `position_binned` and y equal to `Chromosome`.
+
+
 ### Missing data and amount of heterozygosity
 
 ```{r}
